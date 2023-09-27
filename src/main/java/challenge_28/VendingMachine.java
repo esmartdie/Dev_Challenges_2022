@@ -32,26 +32,31 @@ public class VendingMachine {
 
     public void selectProductFromConsole() {
         Scanner scanner = new Scanner(System.in);
+        boolean validProduct = false;
 
-        // print a list of available products
+        // Print a list of available products
         System.out.println("Available Products:");
         for (int i = 0; i < products.size(); i++) {
-            System.out.println((i+1) + ": " + products.get(i).getName() + "| Price: " + products.get(i).getPrice());
+            System.out.println(products.get(i).getId() + ": " + products.get(i).getName() + "| Price: " + products.get(i).getPrice());
         }
 
-        //Enter the product selection
+        // Enter the product selection
         System.out.print("Enter the product number you want to purchase: ");
-        int selectedProduct = scanner.nextInt();
+        int selectedProduct = scanner.nextInt() ;
 
-        if (selectedProduct >= 0 && selectedProduct < products.size()) {
-            System.out.println("You selected: " + products.get(selectedProduct).getName());
-            productSelection = selectedProduct;
-        } else {
-            System.out.println("Invalid product selection.");
+        for (VendingMachineProducts product: products){
+            if (selectedProduct == product.getId()){
+                System.out.println("You selected: " + product.getName());
+                productSelection = selectedProduct;
+                validProduct = true;
+            }
         }
-
-       // scanner.close();
+        if (!validProduct) {
+            System.out.println("Invalid product selection.");
+            System.exit(0);
+        }
     }
+
 
     public void insertCoinsFromConsole() {
         Scanner scanner = new Scanner(System.in);
@@ -62,7 +67,7 @@ public class VendingMachine {
 
             if (coinValue == 0) {
                 break;
-            } else if (coinValue == 5 || coinValue == 10 || coinValue == 25 || coinValue == 100 || coinValue == 200) {
+            } else if (coinValue == 5 || coinValue == 10 || coinValue == 50 || coinValue == 100 || coinValue == 200) {
                 inputCoins.add(coinValue);
                 System.out.println("Inserted " + coinValue + " cents.");
             } else {
@@ -76,41 +81,44 @@ public class VendingMachine {
     public List<Integer> enoughtMoney(){
         List<Integer> changeList = new ArrayList<>();
         int inputMoney = sumListElements(inputCoins);
+        int change = inputMoney  - productPrice;
 
-        if(inputMoney == productPrice){
+        if(change == 0){
             changeList.add(0);
             System.out.println("Transaction Complete, you don't have any change.");
             return changeList;
-        }else if (inputMoney<productPrice){
-            System.out.println("Enought money to complete the transaction. Here are your coins");
+        }else if (change <0){
+            System.out.println("Not enought money to complete the transaction. Here are your coins");
             for (int coins : inputCoins){
-                System.out.println("Coin of: " + coins + "cents to collect");
+                System.out.println("Coin of: " + coins + " cents to collect from the box");
             }
             return inputCoins;
         }else{
             for (int denomination : COIN_DENOMINATIONS) {
-                int numberOfCoins = inputMoney / denomination;
+                int numberOfCoins = change / denomination;
                 for (int i = 0; i < numberOfCoins; i++) {
                     changeList.add(denomination);
                 }
-                inputMoney -= numberOfCoins * denomination;
+                change -= numberOfCoins * denomination;
             }
             for (int coins : changeList){
-                System.out.println("Coin of: " + coins + "cents to collect");
+                System.out.println("Coin of: " + coins + " cents to collect from the box");
             }
+            System.out.println("Thanks for your pourchase, take you'r product from the box");
             return changeList;
 
         }
 
     }
 
-    public int sumListElements(List<Integer> list) {
+    private int sumListElements(List<Integer> list) {
         int sum = 0;
         for (int element : list) {
             sum += element;
         }
         return sum;
     }
+
 
     public int setProductPrice(int productId) {
         for (VendingMachineProducts product : products) {
@@ -121,7 +129,6 @@ public class VendingMachine {
         }
         return 0;
     }
-
 
 
     List<VendingMachineProducts> products;

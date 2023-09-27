@@ -40,7 +40,6 @@ public class StationVendingMachine {
         vendingMachine.setProductPrice(vendingMachine.getProductSelection());
         List<Integer> change = vendingMachine.enoughtMoney();
 
-
     }
 
 }
