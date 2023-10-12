@@ -3,7 +3,7 @@ package challenge_40;
 public class PascalTriangle {
 
     public static void main(String[] args) {
-        int sideSize = 8;
+        int sideSize = 4;
         drawEquilateralPascalTriangle(sideSize);
     }
 
