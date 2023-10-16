@@ -1,4 +1,4 @@
-import challenge_46.MostCommonVowel;
+import challenge_47.MostCommonVowel;
 import org.junit.Test;
 
 import static org.testng.AssertJUnit.assertEquals;

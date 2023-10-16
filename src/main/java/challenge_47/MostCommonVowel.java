@@ -1,4 +1,4 @@
-package challenge_46;
+package challenge_47;
 
 import java.text.Normalizer;
 import java.util.HashMap;
